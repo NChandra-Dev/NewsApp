@@ -34,12 +34,9 @@ public class NewsAdapter extends ArrayAdapter<News> {
             listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.list_item, parent, false);
         }
-        //String imageUrl = currentWord.getImageURL();
+
 
         News currentWord = getItem(position);
-        //String section = currentWord.getSectionName();
-        //TextView sectionTextView = (TextView) listItemView.findViewById(R.id.section_text_view);
-        //sectionTextView.setText(section);
 
         String output = currentWord.getTitle();
         TextView titleTextView = (TextView) listItemView.findViewById(R.id.title_text_view);
@@ -49,9 +46,7 @@ public class NewsAdapter extends ArrayAdapter<News> {
         TextView dateTextView = (TextView) listItemView.findViewById(R.id.date_text_view);
         dateTextView.setText(date);
 
-        //String time = currentWord.getTime();
-        //TextView timeTextView = (TextView) listItemView.findViewById(R.id.time_text_view);
-        //timeTextView.setText(time);
+
 
         String imageURL = currentWord.getImageURL();
 

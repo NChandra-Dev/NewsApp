@@ -7,7 +7,7 @@ public class News {
     private String mDate;
     private String mUrl;
     private String  mTime;
-    //private String mSectionName;
+
     private String mImageUrl;
 
 
@@ -18,9 +18,7 @@ public class News {
         mTime = time;
         mImageUrl = imageUrl;
     }
-    //public String getSectionName() {
-       // return mSectionName;
-    //}
+
     public String getTitle() {
         return mTitle;
     }

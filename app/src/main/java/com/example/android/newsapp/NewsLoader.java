@@ -35,13 +35,7 @@ public class NewsLoader extends AsyncTaskLoader<List<News>> {
         forceLoad();
     }
 
-    /**
-     * This method is invoked (or called) on a background thread, so we can perform
-     * long-running operations like making a network request.
-     * <p>
-     * It is NOT okay to update the UI from a background thread, so we just return an
-     * {@link News} object as the result.
-     */
+
 
     @Override
     public List<News> loadInBackground() {

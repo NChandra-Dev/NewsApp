@@ -31,28 +31,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Helper methods related to requesting and receiving earthquake data from USGS.
- */
+
 public final class QueryUtils {
 
 
-    /**
-     * Create a private constructor because no one should ever create a {@link QueryUtils} object.
-     * This class is only meant to hold static variables and methods, which can be accessed
-     * directly from the class name QueryUtils (and an object instance of QueryUtils is not needed).
-     */
+
     private QueryUtils() {
     }
 
     private static final String ACCEPT_PROPERTY = "application/geo+json;version=1";
     private static final String USER_AGENT_PROPERTY = "newsapi.org (neerajchandra263@gmail.com)"; //your email id for that site.
-    /** Tag for the log messages */
+
     public static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
-    /**
-     * Query the USGS dataset and return an {@link News} object to represent a single earthquake.
-     */
+
     public static List<News> fetchNewsTitle(String requestUrl) {
         // Create URL object
         try {
@@ -76,9 +68,7 @@ public final class QueryUtils {
         // Return the {@link Earthquake}
         return news;
     }
-    /**
-     * Returns new URL object from the given string URL.
-     */
+
     private static URL createUrl(String stringUrl) {
         URL url = null;
         try {
@@ -89,9 +79,7 @@ public final class QueryUtils {
         return url;
     }
 
-    /**
-     * Make an HTTP request to the given URL and return a String as the response.
-     */
+
     private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
 
@@ -126,19 +114,14 @@ public final class QueryUtils {
                 urlConnection.disconnect();
             }
             if (inputStream != null) {
-                // Closing the input stream could throw an IOException, which is why
-                // the makeHttpRequest(URL url) method signature specifies than an IOException
-                // could be thrown.
+
                 inputStream.close();
             }
         }
         return jsonResponse;
     }
 
-    /**
-     * Convert the {@link InputStream} into a String which contains the
-     * whole JSON response from the server.
-     */
+
     private static String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
         if (inputStream != null) {
@@ -153,37 +136,29 @@ public final class QueryUtils {
         return output.toString();
     }
 
-    /**
-     * Return a list of {@link News} objects that has been built up from
-     * parsing a JSON response.
-     *
-     */
+
 
 
     private static List<News> extractFeatureFromJSON(String newsJSON) {
-        // If the JSON string is empty or null, then return early.
+
         if (TextUtils.isEmpty(newsJSON)){
             return null;
         }
-        // Create an empty ArrayList that we can start adding earthquakes to
+
         List<News> news = new ArrayList<>();
 
 
 
 
-        // Try to parse the JSON_RESPONSE_STRING. If there's a problem with the way the JSON
-        // is formatted, a JSONException exception object will be thrown.
-        // Catch the exception so the app doesn't crash, and print the error message to the logs.
+
         try {
             int i;
 
-            // Create a JSONObject from the JSON response string
+
             JSONObject baseJsonObject = new JSONObject(newsJSON);
-            // Extract the JSONArray associated with the key called "features",
-            // which represents a list of features (or earthquakes).
-            //JSONObject newsObject = baseJsonObject.getJSONObject("response");
+
             JSONArray articlesArray = baseJsonObject.getJSONArray("articles");
-            // For each earthquake in the earthquakeArray, create an {@link Earthquake} object
+
             for( i = 0; i < articlesArray.length(); i++) {
 
                 JSONObject currentsNews = articlesArray.getJSONObject(i);
@@ -196,26 +171,19 @@ public final class QueryUtils {
                 String date = currentsNews.getString("publishedAt");
 
                 SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-                //SimpleDateFormat outputFormat = new SimpleDateFormat("MMM-dd hh:mm a");
                 SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date parsedDate = inputFormat.parse(date);
                 String formattedDate = outputFormat.format(parsedDate);
                 String date2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
                 Log.v(LOG_TAG, "formattedDate= "+ formattedDate + " date2= " + date2);
 
-                //String[] parts = formattedDate.split(" ");
-                //formattedDate= parts[0];
-                //String time  = parts[1]+" "+parts[2];
+
 
                 String time = "";
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-                // parse method is used to parse
-                // the text from a string to
-                // produce the date
                 Date d1 = sdf.parse(formattedDate);
                 Date d2 = sdf.parse(date2);
-                // Calucalte time difference
-                // in milliseconds
+
                 long difference_In_Time
                         = d2.getTime() - d1.getTime();
 
@@ -236,7 +204,7 @@ public final class QueryUtils {
                    formattedTimeDiff = difference_In_Hours + " hour ago";
                }
                 Log.v(LOG_TAG, "Minutes= "+ difference_In_Minutes + " Hours= " + difference_In_Hours);
-                //String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
 
 
                 News New = new News( webTitle, formattedTimeDiff, url, time, imageUrl);
@@ -249,12 +217,10 @@ public final class QueryUtils {
             }
         }
         catch (JSONException | ParseException e) {
-            // If an error is thrown when executing any of the above statements in the "try" block,
-            // catch the exception here, so the app doesn't crash. Print a log message
-            // with the message from the exception.
+
             Log.e("QueryUtils", "Problem parsing news JSON results", e);
         }
-        // Return the list of earthquakes
+
         return news;
     }
 
